@@ -39,24 +39,35 @@
 </head>
 <body class="bg-white flex flex-col min-h-screen">
 
-    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 h-20 flex items-center">
+    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 h-20 flex items-center shadow-sm">
         <div class="max-w-[1600px] mx-auto w-full px-6 flex justify-between items-center">
             <a href="#" onclick="switchView('shop')" class="group">
                 <img src="LOGO NODO.png" alt="NODO" class="h-10 w-auto object-contain opacity-90 group-hover:opacity-100 transition">
             </a>
-            <div class="flex gap-10 text-sm tracking-wide text-gray-500">
+            
+            <div class="hidden md:flex gap-8 text-sm tracking-wide text-gray-500">
                 <button onclick="switchView('shop')" id="btn-shop" class="nav-btn active hover:text-black transition">TIENDA</button>
                 <button onclick="switchView('studio')" id="btn-studio" class="nav-btn hover:text-black transition">PROYECTOS</button>
             </div>
-            <a href="https://wa.me/51939831604" class="hidden md:flex items-center gap-2 text-xs font-bold bg-nodo-black text-white px-6 py-3 rounded-full hover:bg-nodo-accent transition">
-                <i class="fa-brands fa-whatsapp text-lg"></i> <span>CONTACTAR</span>
-            </a>
+
+            <div class="flex items-center gap-4">
+                <a href="https://www.tiktok.com/@nodo.arquitectura" target="_blank" class="text-xl hover:text-black transition">
+                    <i class="fa-brands fa-tiktok"></i>
+                </a>
+                <button onclick="customQuote()" class="hidden md:flex items-center gap-2 text-xs font-bold border-2 border-nodo-black px-5 py-2 rounded-full hover:bg-nodo-black hover:text-white transition">
+                    <i class="fa-solid fa-pencil"></i> COTIZAR A MEDIDA
+                </button>
+            </div>
         </div>
     </nav>
 
     <header class="pt-32 pb-10 px-6 text-center max-w-4xl mx-auto">
         <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 text-nodo-black" id="main-title">Mobiliario Moderno.</h1>
         <p class="text-gray-500 text-lg font-light" id="main-desc">Piezas funcionales diseñadas y fabricadas en Perú.</p>
+        
+        <button onclick="customQuote()" class="md:hidden mt-6 bg-nodo-black text-white text-xs font-bold px-6 py-3 rounded-full shadow-lg">
+            <i class="fa-solid fa-pencil mr-2"></i> COTIZAR DISEÑO PROPIO
+        </button>
     </header>
 
     <main class="flex-grow px-6 pb-24">
@@ -65,7 +76,7 @@
             <div id="view-shop" class="fade-in">
                 <div class="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
                     <span class="text-xs font-bold text-nodo-accent uppercase tracking-widest">Colección 2026</span>
-                    <span class="text-xs font-bold text-gray-400 flex items-center gap-1"><i class="fa-solid fa-earth-americas"></i> Envíos Nacionales</span>
+                    <span class="text-xs font-bold text-gray-400 flex items-center gap-1"><i class="fa-solid fa-earth-americas"></i> Envíos a todo el Perú</span>
                 </div>
                 <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-x-8 md:gap-y-12"></div>
             </div>
@@ -76,13 +87,16 @@
                         <span class="text-xs font-bold text-nodo-accent uppercase tracking-widest mb-2 block">Portafolio</span>
                         <h2 class="text-3xl font-extrabold text-nodo-black">Casos de Estudio</h2>
                     </div>
+                    
                     <article class="mb-24">
                         <div class="flex justify-between items-end mb-4">
                             <h3 class="font-title text-2xl font-bold text-gray-900">Residencial Luján</h3>
                             <span class="text-xs font-bold bg-gray-100 px-2 py-1 rounded text-gray-500">RENDER 3D</span>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="aspect-[4/3] img-wrapper rounded-lg cursor-pointer" onclick="openLightbox(this)"><img src="TOMA FRENTAL GENERAL MEJORADO.jpg"></div>
+                            <div class="aspect-[4/3] img-wrapper rounded-lg cursor-pointer" onclick="openLightbox(this)">
+                                <img src="TOMA FRENTAL GENERAL MEJORADO.jpg" alt="Lujan Main">
+                            </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="col-span-2 aspect-video img-wrapper rounded-lg cursor-pointer group relative" onclick="openLightbox(this)">
                                     <video src="WhatsApp Video 2025-11-30 at 7.00.29 PM.mp4" autoplay muted loop class="opacity-90 group-hover:opacity-100"></video>
@@ -93,18 +107,21 @@
                             </div>
                         </div>
                     </article>
+
                     <article>
                         <div class="flex justify-between items-end mb-4">
                             <h3 class="font-title text-2xl font-bold text-gray-900">Proyecto Huerta</h3>
                             <span class="text-xs font-bold bg-gray-100 px-2 py-1 rounded text-gray-500">OBRA REAL</span>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="aspect-[3/4] img-wrapper rounded-lg cursor-pointer" onclick="openLightbox(this)"><img src="IMG_2397 (1).jpg"></div>
+                            <div class="aspect-[3/4] img-wrapper rounded-lg cursor-pointer" onclick="openLightbox(this)">
+                                <img src="IMG_2397 (1).JPG" alt="Huerta Main">
+                            </div>
                             <div class="md:col-span-2 grid grid-cols-2 gap-4 h-full content-start">
-                                <div class="aspect-square img-wrapper rounded-lg cursor-pointer" onclick="openLightbox(this)"><img src="IMG_2361.jpg"></div>
-                                <div class="aspect-square img-wrapper rounded-lg cursor-pointer" onclick="openLightbox(this)"><img src="IMG_2335.jpg"></div>
+                                <div class="aspect-square img-wrapper rounded-lg cursor-pointer" onclick="openLightbox(this)"><img src="IMG_2361.JPG"></div>
+                                <div class="aspect-square img-wrapper rounded-lg cursor-pointer" onclick="openLightbox(this)"><img src="IMG_2335.JPG"></div>
                                 <div class="col-span-2 aspect-video img-wrapper rounded-lg cursor-pointer group relative" onclick="openLightbox(this)">
-                                    <video src="IMG_2417.MOV" autoplay muted loop class="opacity-90 group-hover:opacity-100"></video>
+                                    <video src="WhatsApp Video 2026-01-10 at 2.51.58 PM.mp4" autoplay muted loop class="opacity-90 group-hover:opacity-100 object-top"></video>
                                     <span class="absolute bottom-2 left-2 bg-white text-[10px] font-bold px-2 py-1 rounded">VIDEO OBRA</span>
                                 </div>
                             </div>
@@ -118,12 +135,18 @@
 
     <footer class="bg-gray-50 py-12 border-t border-gray-100 text-center">
         <img src="LOGO NODO.png" class="h-8 mx-auto mb-6 opacity-50 mix-blend-multiply">
-        <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">© 2026 NODO Arquitectura. Lima, Perú.</p>
+        <div class="flex justify-center gap-6 my-6 text-2xl text-gray-400">
+            <a href="https://wa.me/51939831604" class="hover:text-[#25D366] transition"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="https://www.tiktok.com/@nodo.arquitectura" class="hover:text-black transition"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="#" class="hover:text-[#E1306C] transition"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+        <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">© 2026 NODO Arquitectura. Villa el Salvador, Lima.</p>
     </footer>
 
-    <div id="lightbox" class="fixed inset-0 z-[60] bg-white/95 flex items-center justify-center p-4" onclick="closeLightbox()">
-        <button class="absolute top-6 right-6 text-black text-4xl hover:text-nodo-accent">×</button>
-        <div id="lightbox-content" class="max-w-5xl max-h-[90vh] shadow-2xl rounded-lg overflow-hidden flex justify-center"></div>
+    <div id="lightbox" class="fixed inset-0 z-[100] bg-white/95 flex items-center justify-center p-4 cursor-zoom-out" onclick="closeLightbox()">
+        <button class="absolute top-6 right-6 text-black text-4xl hover:text-nodo-accent z-50">×</button>
+        <div id="lightbox-content" class="max-w-5xl max-h-[90vh] shadow-2xl rounded-lg overflow-hidden flex justify-center relative z-40"></div>
+        <p class="absolute bottom-6 text-xs font-bold text-gray-400 animate-pulse z-40">Toca la pantalla para cerrar</p>
     </div>
 
     <div id="buyModal" class="fixed inset-0 z-[70] bg-black/50 backdrop-blur-sm flex items-end md:items-center justify-center p-4 overflow-y-auto">
@@ -144,16 +167,31 @@
 
                 <div id="limaOptions" class="space-y-3">
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Distrito (Lima)</label>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Selecciona tu Distrito (Calculadora de Movilidad)</label>
                         <select id="districtSelect" onchange="calcPrice()" class="w-full border-2 border-gray-100 rounded-lg p-3 text-sm font-bold focus:border-nodo-accent outline-none">
-                            <option value="">Selecciona tu distrito...</option>
-                            <option value="LimaSur">LIMA SUR (Barranco, Chorrillos, Surco, Miraflores...) - ¡GRATIS!</option>
-                            <option value="LimaOtro">OTRO DISTRITO DE LIMA - S/. 20.00</option>
+                            <option value="">Buscar distrito...</option>
+                            <option value="0|Villa el Salvador">Villa el Salvador (GRATIS)</option>
+                            <option value="15|Villa María del Triunfo">Villa María del Triunfo (+S/15)</option>
+                            <option value="20|San Juan de Miraflores">San Juan de Miraflores (+S/20)</option>
+                            <option value="20|Chorrillos">Chorrillos (+S/20)</option>
+                            <option value="25|Barranco">Barranco (+S/25)</option>
+                            <option value="25|Surco (Viejo/Nuevo)">Santiago de Surco (+S/25)</option>
+                            <option value="30|Miraflores">Miraflores (+S/30)</option>
+                            <option value="30|San Borja">San Borja (+S/30)</option>
+                            <option value="30|San Isidro">San Isidro (+S/30)</option>
+                            <option value="30|Surquillo">Surquillo (+S/30)</option>
+                            <option value="35|La Molina">La Molina (+S/35)</option>
+                            <option value="35|La Victoria">La Victoria (+S/35)</option>
+                            <option value="35|Lince/Jesus Maria">Lince / Jesús María (+S/35)</option>
+                            <option value="35|Magdalena/San Miguel">Magdalena / San Miguel (+S/35)</option>
+                            <option value="40|Lima Cercado">Lima Cercado (+S/40)</option>
+                            <option value="45|Los Olivos/SMP">Los Olivos / SMP (+S/45)</option>
+                            <option value="99|Otro Distrito Lejano">Otro Distrito (A cotizar)</option>
                         </select>
                     </div>
                     
                     <button onclick="toggleMap()" class="text-xs font-bold text-nodo-accent border border-nodo-accent px-4 py-2 rounded-full hover:bg-nodo-accent hover:text-white transition flex items-center gap-2 w-full justify-center">
-                        <i class="fa-solid fa-location-dot"></i> <span id="mapBtnText">Seleccionar ubicación exacta en Mapa</span>
+                        <i class="fa-solid fa-location-dot"></i> <span id="mapBtnText">Confirmar ubicación en Mapa (Opcional)</span>
                     </button>
                     <div id="mapContainer" class="hidden shadow-inner border border-gray-200"></div>
                     <p id="locationStatus" class="text-[10px] text-green-600 font-bold text-center hidden">✓ Ubicación guardada</p>
@@ -170,8 +208,9 @@
                             <span class="font-bold">Política de Envíos a Provincia:</span>
                         </div>
                         <ul class="list-disc ml-6 space-y-1">
-                            <li>El costo de envío se paga por <b>Adelantado</b> (Yape/Plin/Transferencia).</li>
-                            <li>El costo del producto se paga <b>Contra Entrega</b> al recibir.</li>
+                            <li>Envío por Shalom/Marvisur.</li>
+                            <li>Pagas el flete allá al recoger.</li>
+                            <li>El mueble se paga contra entrega (Previa coordinación).</li>
                         </ul>
                     </div>
                 </div>
@@ -182,14 +221,14 @@
                         <span id="paymentMethod" class="text-xs font-bold text-black">Contra Entrega</span>
                     </div>
                     <div class="flex justify-between items-center border-t border-gray-200 pt-2 mt-2">
-                        <span class="text-sm font-bold text-gray-500">Total Producto:</span>
+                        <span class="text-sm font-bold text-gray-500">Total (Producto + Envío):</span>
                         <span id="totalPrice" class="text-xl font-extrabold text-nodo-black">--</span>
                     </div>
                     <div id="shippingNote" class="text-[10px] text-right text-nodo-accent font-bold mt-1 hidden">+ Costo de envío se coordina por WhatsApp</div>
                 </div>
                 
                 <button onclick="sendWA()" class="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-4 rounded-xl flex justify-center gap-2 transition transform active:scale-95 shadow-lg">
-                    <i class="fa-brands fa-whatsapp text-xl"></i> Confirmar Pedido
+                    <i class="fa-brands fa-whatsapp text-xl"></i> Enviar Pedido
                 </button>
             </div>
         </div>
@@ -213,14 +252,22 @@
         const grid = document.getElementById('product-grid');
         productos.forEach(p => {
             grid.innerHTML += `
-                <div class="product-card group cursor-pointer bg-white" onclick="openBuyModal('${p.nombre}', ${p.precio})">
-                    <div class="aspect-[2/3] img-wrapper rounded-lg mb-4"><img src="${p.img}" alt="${p.nombre}"></div>
-                    <div>
-                        <h3 class="font-title font-bold text-sm md:text-base text-gray-900 leading-tight mb-1">${p.nombre}</h3>
+                <div class="product-card group bg-white">
+                    <div class="aspect-[2/3] img-wrapper rounded-lg mb-4 relative cursor-zoom-in" onclick="zoomImage('${p.img}')">
+                        <img src="${p.img}" alt="${p.nombre}">
+                        <div class="absolute bottom-2 right-2 bg-white/80 backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-gray-500 shadow-sm pointer-events-none">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i> VER
+                        </div>
+                    </div>
+                    
+                    <div class="cursor-pointer" onclick="openBuyModal('${p.nombre}', ${p.precio})">
+                        <h3 class="font-title font-bold text-sm md:text-base text-gray-900 leading-tight mb-1 hover:text-nodo-accent transition">${p.nombre}</h3>
                         <p class="text-[10px] md:text-xs text-gray-500 mb-3 font-medium bg-gray-100 inline-block px-2 py-1 rounded">${p.medidas}</p>
                         <div class="flex justify-between items-center mt-1">
                             <span class="text-base md:text-lg font-bold text-nodo-black">S/. ${p.precio}</span>
-                            <div class="bg-nodo-black text-white w-8 h-8 rounded-full flex items-center justify-center group-hover:bg-nodo-accent transition"><i class="fa-solid fa-cart-plus text-xs"></i></div>
+                            <div class="bg-nodo-black text-white w-8 h-8 rounded-full flex items-center justify-center group-hover:bg-nodo-accent transition">
+                                <i class="fa-solid fa-cart-plus text-xs"></i>
+                            </div>
                         </div>
                     </div>
                 </div>`;
@@ -229,35 +276,42 @@
         function switchView(view) {
             const shop = document.getElementById('view-shop');
             const studio = document.getElementById('view-studio');
-            const title = document.getElementById('main-title');
-            const desc = document.getElementById('main-desc');
             const bShop = document.getElementById('btn-shop');
             const bStudio = document.getElementById('btn-studio');
 
             if (view === 'shop') {
                 shop.classList.remove('hidden'); studio.classList.add('hidden');
-                title.innerText = "Mobiliario Moderno.";
-                desc.innerText = "Piezas funcionales diseñadas y fabricadas en Perú.";
                 bShop.classList.add('active'); bStudio.classList.remove('active');
             } else {
                 shop.classList.add('hidden'); studio.classList.remove('hidden');
-                title.innerText = "Arquitectura & Detalle.";
-                desc.innerText = "Proyectos integrales de diseño y ejecución.";
                 bShop.classList.remove('active'); bStudio.classList.add('active');
             }
             window.scrollTo({top:0, behavior:'smooth'});
-        }   
+        }
 
+        // --- FUNCIONES DE ZOOM ---
+        
+        // 1. ZOOM PARA PRODUCTOS (TIENDA) - Recibe la URL directa
+        function zoomImage(imgUrl) {
+            const c = document.getElementById('lightbox-content');
+            // Creamos la imagen limpia
+            c.innerHTML = `<img src="${imgUrl}" class="max-h-[85vh] w-auto mx-auto rounded-lg shadow-2xl">`;
+            document.getElementById('lightbox').classList.add('active');
+        }
+
+        // 2. ZOOM PARA PROYECTOS (STUDIO) - Funciona como antes (clona el elemento)
         function openLightbox(el){
             const c = document.getElementById('lightbox-content'); c.innerHTML='';
             const m = el.querySelector('img, video').cloneNode(true);
-            m.className = "max-h-[85vh] w-auto mx-auto rounded-lg";
+            m.className = "max-h-[85vh] w-auto mx-auto rounded-lg shadow-2xl";
             if(m.tagName==='VIDEO') m.controls = true;
             c.appendChild(m);
             document.getElementById('lightbox').classList.add('active');
         }
+        
         function closeLightbox(){ document.getElementById('lightbox').classList.remove('active'); }
 
+        // --- LÓGICA DE COMPRA ---
         let currentProduct = '', currentPrice = 0, map = null, marker = null, userCoords = null;
 
         function openBuyModal(name, price) {
@@ -301,9 +355,9 @@
             const container = document.getElementById('mapContainer');
             if (container.classList.contains('hidden')) {
                 container.classList.remove('hidden');
-                document.getElementById('mapBtnText').innerText = "Cerrar Mapa";
+                document.getElementById('mapBtnText').innerText = "Ocultar Mapa";
                 if (!map) {
-                    map = L.map('mapContainer').setView([-12.0464, -77.0428], 12);
+                    map = L.map('mapContainer').setView([-12.213, -76.938], 12); // Centrado en VES
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
                     map.on('click', function(e) {
                         if (marker) map.removeLayer(marker);
@@ -316,7 +370,7 @@
                 setTimeout(() => { map.invalidateSize(); }, 100);
             } else {
                 container.classList.add('hidden');
-                document.getElementById('mapBtnText').innerText = "Seleccionar ubicación exacta en Mapa";
+                document.getElementById('mapBtnText').innerText = "Confirmar ubicación en Mapa";
             }
         }
 
@@ -327,13 +381,20 @@
             if (scope === 'provincia') {
                 label.innerText = "S/. " + currentPrice; 
             } else {
-                const dist = document.getElementById('districtSelect').value;
-                if(dist === "") {
+                const distValue = document.getElementById('districtSelect').value; 
+                if(distValue === "") {
                     label.innerText = "S/. " + currentPrice; 
-                } else if (dist === 'LimaSur') {
-                    label.innerText = "S/. " + currentPrice + " (Envío GRATIS)";
                 } else {
-                    label.innerText = "S/. " + (currentPrice + 20) + " (Incluye Envío)";
+                    const parts = distValue.split('|');
+                    const costoEnvio = parseInt(parts[0]);
+                    
+                    if (costoEnvio === 99) {
+                        label.innerText = "S/. " + currentPrice + " (+ Envío a Cotizar)";
+                    } else if (costoEnvio === 0) {
+                        label.innerText = "S/. " + currentPrice + " (Envío GRATIS)";
+                    } else {
+                        label.innerText = "S/. " + (currentPrice + costoEnvio);
+                    }
                 }
             }
         }
@@ -343,14 +404,19 @@
             let msg = "";
 
             if (scope === 'lima') {
-                const dist = document.getElementById('districtSelect').value;
-                if(!dist) return alert("Selecciona tu distrito en Lima");
-                const envio = dist === 'LimaSur' ? 0 : 20;
-                const total = currentPrice + envio;
+                const distValue = document.getElementById('districtSelect').value;
+                if(!distValue) return alert("Selecciona tu distrito para calcular el envío.");
+                
+                const parts = distValue.split('|');
+                const costoEnvio = parseInt(parts[0]);
+                const nombreDistrito = parts[1];
+                
+                const total = (costoEnvio === 99) ? currentPrice : (currentPrice + costoEnvio);
+                const txtTotal = (costoEnvio === 99) ? `S/. ${currentPrice} + Envío Pendiente` : `S/. ${total}`;
+                
                 const mapaLink = userCoords ? `https://maps.google.com/?q=${userCoords.lat},${userCoords.lng}` : "No especificado";
-                const distNombre = dist === 'LimaSur' ? "LIMA SUR" : "LIMA OTROS";
 
-                msg = `Hola NODO, pedido LIMA:\n📦 *${currentProduct}*\n💰 Total: S/. ${total}\n📍 Zona: ${distNombre}\n🗺️ GPS: ${mapaLink}\n\nPago contra entrega.`;
+                msg = `Hola NODO, pedido CONFIRMADO:\n📦 *${currentProduct}*\n📍 Distrito: ${nombreDistrito}\n💰 Total a Pagar: *${txtTotal}*\n🗺️ Mapa: ${mapaLink}\n\nPago contra entrega.`;
             } else {
                 const city = document.getElementById('cityInput').value;
                 if(!city) return alert("Escribe tu ciudad");
@@ -360,6 +426,11 @@
 
             window.open(`https://wa.me/51939831604?text=${encodeURIComponent(msg)}`);
             closeBuyModal();
+        }
+
+        function customQuote() {
+            const msg = "Hola NODO, quisiera cotizar un mueble con *Medidas y Diseño Especial*. 📐✨";
+            window.open(`https://wa.me/51939831604?text=${encodeURIComponent(msg)}`);
         }
     </script>
 </body>
