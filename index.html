@@ -235,8 +235,8 @@
     </div>
 
     <script>
+        // LISTA DE PRODUCTOS (SIN LA REPISA COLLECTOR)
         const productos = [
-            { nombre: "REPISA COLLECTOR", img: "ESTANTE FUNKO.png", medidas: "120cm Al x 60cm An x 12cm Prof.", precio: 140 },
             { nombre: "ZAPATERO 18 PARES", img: "ZAPATERO 18 PARES.png", medidas: "107cm Al x 72cm An x 31cm Prof.", precio: 220 },
             { nombre: "ESTANTE RECTO", img: "ESTANTE RECTO.png", medidas: "182cm Al x 80cm An x 24cm Prof.", precio: 200 },
             { nombre: "ZAPATERO 10 PARES", img: "ZAPATERO 10 PARES.png", medidas: "156cm Al x 26.6cm An x 30cm Prof.", precio: 130 },
@@ -252,16 +252,10 @@
 
         const grid = document.getElementById('product-grid');
         productos.forEach(p => {
-            // Verificamos si es el producto Funko para manejar la imagen si no existe
-            const imgSrc = (p.nombre === "REPISA COLLECTOR") ? p.img : p.img;
-            
-            // Verificamos si es el nuevo producto Funko para cargar la imagen generada (asegúrate de haberla guardado como ESTANTE FUNKO.png)
-            // Si no existe, mostrará un icono por defecto.
-            
             grid.innerHTML += `
                 <div class="product-card group bg-white">
-                    <div class="aspect-[2/3] img-wrapper rounded-lg mb-4 relative cursor-zoom-in" onclick="zoomImage('${imgSrc}')">
-                        <img src="${imgSrc}" alt="${p.nombre}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1170/1170459.png'">
+                    <div class="aspect-[2/3] img-wrapper rounded-lg mb-4 relative cursor-zoom-in" onclick="zoomImage('${p.img}')">
+                        <img src="${p.img}" alt="${p.nombre}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1170/1170459.png'">
                         <div class="absolute bottom-2 right-2 bg-white/80 backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-gray-500 shadow-sm pointer-events-none">
                             <i class="fa-solid fa-magnifying-glass-plus"></i> VER
                         </div>
