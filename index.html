@@ -235,7 +235,6 @@
     </div>
 
     <script>
-        // LISTA DE PRODUCTOS (SIN LA REPISA COLLECTOR)
         const productos = [
             { nombre: "ZAPATERO 18 PARES", img: "ZAPATERO 18 PARES.png", medidas: "107cm Al x 72cm An x 31cm Prof.", precio: 220 },
             { nombre: "ESTANTE RECTO", img: "ESTANTE RECTO.png", medidas: "182cm Al x 80cm An x 24cm Prof.", precio: 200 },
@@ -411,7 +410,7 @@
                 const total = (costoEnvio === 99) ? currentPrice : (currentPrice + costoEnvio);
                 const txtTotal = (costoEnvio === 99) ? `S/. ${currentPrice} + Envío Pendiente` : `S/. ${total}`;
                 
-                const mapaLink = userCoords ? `https://maps.google.com/?q=${userCoords.lat},${userCoords.lng}` : "No especificado";
+                const mapaLink = userCoords ? `https://www.google.com/maps/search/?api=1&query=${userCoords.lat},${userCoords.lng}` : "No especificado";
 
                 msg = `Hola NODO, pedido CONFIRMADO:\n📦 *${currentProduct}*\n📍 Distrito: ${nombreDistrito}\n💰 Total a Pagar: *${txtTotal}*\n🗺️ Mapa: ${mapaLink}\n\nPago contra entrega.`;
             } else {
