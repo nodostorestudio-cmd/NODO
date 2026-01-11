@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NODO | Store & Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@500;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { 'nodo-black': '#111111', 'nodo-accent': '#C86B46', 'nodo-gray': '#F5F5F5' },
+                    fontFamily: { 'title': ['Montserrat', 'sans-serif'], 'body': ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; color: #111; }
+        h1, h2, h3, .font-title { font-family: 'Montserrat', sans-serif; }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+        .img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .product-card:hover .img-wrapper img { transform: scale(1.05); }
+        .nav-btn.active { color: #111; font-weight: 700; border-bottom: 2px solid #C86B46; }
+        #lightbox, #buyModal { opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+        #lightbox.active, #buyModal.active { opacity: 1; pointer-events: all; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        #mapContainer { height: 200px; width: 100%; border-radius: 0.5rem; z-index: 10; margin-top: 10px; }
+    </style>
+</head>
+<body class="bg-white flex flex-col min-h-screen">
+
+    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 h-20 flex items-center">
+        <div class="max-w-[1600px] mx-auto w-full px-6 flex justify-between items-center">
+            <a href="#" onclick="switchView('shop')" class="group">
+                <img src="LOGO NODO.png" alt="NODO" class="h-10 w-auto object-contain opacity-90 group-hover:opacity-100 transition">
+            </a>
+            <div class="flex gap-10 text-sm tracking-wide text-gray-500">
+                <button onclick="switchView('shop')" id="btn-shop" class="nav-btn active hover:text-black transition">TIENDA</button>
+                <button onclick="switchView('studio')" id="btn-studio" class="nav-btn hover:text-black transition">PROYECTOS</button>
+            </div>
+            <a href="https://wa.me/51939831604" class="hidden md:flex items-center gap-2 text-xs font-bold bg-nodo-black text-white px-6 py-3 rounded-full hover:bg-nodo-accent transition">
+                <i class="fa-brands fa-whatsapp text-lg"></i> <span>CONTACTAR</span>
+            </a>
+        </div>
+    </nav>
+
+    <header class="pt-32 pb-10 px-6 text-center max-w-4xl mx-auto">
+        <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 text-nodo-black" id="main-title">Mobiliario Moderno.</h1>
+        <p class="text-gray-500 text-lg font-light" id="main-desc">Piezas funcionales diseñadas y fabricadas en Perú.</p>
+    </header>
+
+    <main class="flex-grow px-6 pb-24">
+        <div class="max-w-[1600px] mx-auto">
+
+            <div id="view-shop" class="fade-in">
+                <div class="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
+                    <span class="text-xs font-bold text-nodo-accent uppercase tracking-widest">Colección 2026</span>
+                    <span class="text-xs font-bold text-gray-400 flex items-center gap-1"><i class="fa-solid fa-earth-americas"></i> Envíos Nacionales</span>
+                </div>
+                <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-x-8 md:gap-y-12"></div>
+            </div>
+
+            <div id="view-studio" class="hidden fade-in">
+                <div class="max-w-5xl mx-auto">
+                    <div class="mb-12 text-center border-b border-gray-100 pb-8">
+                        <span class="text-xs font-bold text-nodo-accent uppercase tracking-widest mb-2 block">Portafolio</span>
+                        <h2 class="text-3xl font-extrabold text-nodo-black">Casos de Estudio</h2>
+                    </div>
+                    <article class="mb-24">
+                        <div class="flex justify-between items-end mb-4">
+                            <h3 class="font-title text-2xl font-bold text-gray-900">Residencial Luján</h3>
+                            <span class="text-xs font-bold bg-gray-100 px-2 py-1 rounded text-gray-500">RENDER 3D</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="aspect-[4/3] img-wrapper rounded-lg cursor-pointer" onclick="openLightbox(this)"><img src="TOMA FRENTAL GENERAL MEJORADO.jpg"></div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="col-span-2 aspect-video img-wrapper rounded-lg cursor-pointer group relative" onclick="openLightbox(this)">
+                                    <video src="WhatsApp Video 2025-11-30 at 7.00.29 PM.mp4" autoplay muted loop class="opacity-90 group-hover:opacity-100"></video>
+                                    <span class="absolute bottom-2 left-2 bg-white text-[10px] font-bold px-2 py-1 rounded">VIDEO</span>
+                                </div>
+                                <div class="aspect-square img-wrapper rounded-lg cursor-pointer" onclick="openLightbox(this)"><img src="DETALLE CAJÓN MEJORADO.jpg"></div>
+                                <div class="aspect-square img-wrapper rounded-lg cursor-pointer" onclick="openLightbox(this)"><img src="DETALLE OBJETOS MEJORADO.jpg"></div>
+                            </div>
+                        </div>
+                    </article>
+                    <article>
+                        <div class="flex justify-between items-end mb-4">
+                            <h3 class="font-title text-2xl font-bold text-gray-900">Proyecto Huerta</h3>
+                            <span class="text-xs font-bold bg-gray-100 px-2 py-1 rounded text-gray-500">OBRA REAL</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="aspect-[3/4] img-wrapper rounded-lg cursor-pointer" onclick="openLightbox(this)"><img src="IMG_2397 (1).jpg"></div>
+                            <div class="md:col-span-2 grid grid-cols-2 gap-4 h-full content-start">
+                                <div class="aspect-square img-wrapper rounded-lg cursor-pointer" onclick="openLightbox(this)"><img src="IMG_2361.jpg"></div>
+                                <div class="aspect-square img-wrapper rounded-lg cursor-pointer" onclick="openLightbox(this)"><img src="IMG_2335.jpg"></div>
+                                <div class="col-span-2 aspect-video img-wrapper rounded-lg cursor-pointer group relative" onclick="openLightbox(this)">
+                                    <video src="IMG_2417.MOV" autoplay muted loop class="opacity-90 group-hover:opacity-100"></video>
+                                    <span class="absolute bottom-2 left-2 bg-white text-[10px] font-bold px-2 py-1 rounded">VIDEO OBRA</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-gray-50 py-12 border-t border-gray-100 text-center">
+        <img src="LOGO NODO.png" class="h-8 mx-auto mb-6 opacity-50 mix-blend-multiply">
+        <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">© 2026 NODO Arquitectura. Lima, Perú.</p>
+    </footer>
+
+    <div id="lightbox" class="fixed inset-0 z-[60] bg-white/95 flex items-center justify-center p-4" onclick="closeLightbox()">
+        <button class="absolute top-6 right-6 text-black text-4xl hover:text-nodo-accent">×</button>
+        <div id="lightbox-content" class="max-w-5xl max-h-[90vh] shadow-2xl rounded-lg overflow-hidden flex justify-center"></div>
+    </div>
+
+    <div id="buyModal" class="fixed inset-0 z-[70] bg-black/50 backdrop-blur-sm flex items-end md:items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-lg p-6 md:p-8 rounded-2xl shadow-2xl relative transform transition-all scale-100 my-auto">
+            <button onclick="closeBuyModal()" class="absolute top-4 right-4 text-2xl text-gray-300 hover:text-black">×</button>
+            
+            <h3 class="font-title text-2xl font-bold mb-1">Finalizar Pedido</h3>
+            <p id="modalProductName" class="text-nodo-accent font-bold text-sm uppercase tracking-wide mb-6 border-b pb-2">Producto</p>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Destino del Pedido</label>
+                    <select id="scopeSelect" onchange="toggleScope()" class="w-full border-2 border-gray-100 rounded-lg p-3 text-sm font-bold focus:border-nodo-accent outline-none">
+                        <option value="lima">Lima Metropolitana</option>
+                        <option value="provincia">Provincia (Envíos a Nivel Nacional)</option>
+                    </select>
+                </div>
+
+                <div id="limaOptions" class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Distrito (Lima)</label>
+                        <select id="districtSelect" onchange="calcPrice()" class="w-full border-2 border-gray-100 rounded-lg p-3 text-sm font-bold focus:border-nodo-accent outline-none">
+                            <option value="">Selecciona tu distrito...</option>
+                            <option value="LimaSur">LIMA SUR (Barranco, Chorrillos, Surco, Miraflores...) - ¡GRATIS!</option>
+                            <option value="LimaOtro">OTRO DISTRITO DE LIMA - S/. 20.00</option>
+                        </select>
+                    </div>
+                    
+                    <button onclick="toggleMap()" class="text-xs font-bold text-nodo-accent border border-nodo-accent px-4 py-2 rounded-full hover:bg-nodo-accent hover:text-white transition flex items-center gap-2 w-full justify-center">
+                        <i class="fa-solid fa-location-dot"></i> <span id="mapBtnText">Seleccionar ubicación exacta en Mapa</span>
+                    </button>
+                    <div id="mapContainer" class="hidden shadow-inner border border-gray-200"></div>
+                    <p id="locationStatus" class="text-[10px] text-green-600 font-bold text-center hidden">✓ Ubicación guardada</p>
+                </div>
+
+                <div id="provinciaOptions" class="hidden space-y-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Ciudad / Departamento</label>
+                        <input type="text" id="cityInput" placeholder="Ej: Arequipa, Trujillo, Cusco..." class="w-full border-2 border-gray-100 rounded-lg p-3 text-sm font-bold focus:border-nodo-accent outline-none">
+                    </div>
+                    <div class="bg-blue-50 text-blue-800 p-4 rounded-lg text-xs font-medium border border-blue-100">
+                        <div class="flex gap-2 mb-1">
+                            <i class="fa-solid fa-truck-fast text-lg"></i>
+                            <span class="font-bold">Política de Envíos a Provincia:</span>
+                        </div>
+                        <ul class="list-disc ml-6 space-y-1">
+                            <li>El costo de envío se paga por <b>Adelantado</b> (Yape/Plin/Transferencia).</li>
+                            <li>El costo del producto se paga <b>Contra Entrega</b> al recibir.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-xs font-bold text-gray-500">Condición:</span>
+                        <span id="paymentMethod" class="text-xs font-bold text-black">Contra Entrega</span>
+                    </div>
+                    <div class="flex justify-between items-center border-t border-gray-200 pt-2 mt-2">
+                        <span class="text-sm font-bold text-gray-500">Total Producto:</span>
+                        <span id="totalPrice" class="text-xl font-extrabold text-nodo-black">--</span>
+                    </div>
+                    <div id="shippingNote" class="text-[10px] text-right text-nodo-accent font-bold mt-1 hidden">+ Costo de envío se coordina por WhatsApp</div>
+                </div>
+                
+                <button onclick="sendWA()" class="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-4 rounded-xl flex justify-center gap-2 transition transform active:scale-95 shadow-lg">
+                    <i class="fa-brands fa-whatsapp text-xl"></i> Confirmar Pedido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const productos = [
+            { nombre: "ZAPATERO 18 PARES", img: "ZAPATERO 18 PARES.png", medidas: "107cm Al x 72cm An x 31cm Prof.", precio: 220 },
+            { nombre: "ESTANTE RECTO", img: "ESTANTE RECTO.png", medidas: "182cm Al x 80cm An x 24cm Prof.", precio: 200 },
+            { nombre: "ZAPATERO 10 PARES", img: "ZAPATERO 10 PARES.png", medidas: "156cm Al x 26.6cm An x 30cm Prof.", precio: 130 },
+            { nombre: "ESTANTE ALTO", img: "ESTANTE ALTO.png", medidas: "180cm Al x 35cm An x 37cm Prof.", precio: 160 },
+            { nombre: "ESTANTE MULTIUSO 30 CM", img: "ESTANTE MULTIUSO 30 CM .png", medidas: "150cm Al x 30cm An x 25cm Prof.", precio: 130 },
+            { nombre: "ESTANTE MULTIUSO 50 CM", img: "ESTANTE MULTIUSO 50 CM .jpg", medidas: "150cm Al x 50cm An x 25cm Prof.", precio: 160 },
+            { nombre: "ZAPATERO 8 PARES", img: "ZAPATERO 8 PARES.png", medidas: "122cm Al x 26.6cm An x 30cm Prof.", precio: 100 },
+            { nombre: "ZAPATERO 10 PARES M2", img: "ZAPATERO 10 PARES MODELO 2.png", medidas: "92cm Al x 47.8cm An x 32cm Prof.", precio: 100 },
+            { nombre: "REPISA PIRÁMIDE", img: "REPISA PIRAMIDE.png", medidas: "65cm Al x 50cm An x 15cm Prof.", precio: 50 },
+            { nombre: "ESTANTE EN C", img: "ESTANTE EN C.jpg", medidas: "80cm Al x 59.7cm An x 15cm Prof.", precio: 80 },
+            { nombre: "REPISAS FLOTANTES", img: "REPISAS FLOTANTES.png", medidas: "Set x3 (50/40/30) - 36mm", precio: 70 }
+        ];
+
+        const grid = document.getElementById('product-grid');
+        productos.forEach(p => {
+            grid.innerHTML += `
+                <div class="product-card group cursor-pointer bg-white" onclick="openBuyModal('${p.nombre}', ${p.precio})">
+                    <div class="aspect-[2/3] img-wrapper rounded-lg mb-4"><img src="${p.img}" alt="${p.nombre}"></div>
+                    <div>
+                        <h3 class="font-title font-bold text-sm md:text-base text-gray-900 leading-tight mb-1">${p.nombre}</h3>
+                        <p class="text-[10px] md:text-xs text-gray-500 mb-3 font-medium bg-gray-100 inline-block px-2 py-1 rounded">${p.medidas}</p>
+                        <div class="flex justify-between items-center mt-1">
+                            <span class="text-base md:text-lg font-bold text-nodo-black">S/. ${p.precio}</span>
+                            <div class="bg-nodo-black text-white w-8 h-8 rounded-full flex items-center justify-center group-hover:bg-nodo-accent transition"><i class="fa-solid fa-cart-plus text-xs"></i></div>
+                        </div>
+                    </div>
+                </div>`;
+        });
+
+        function switchView(view) {
+            const shop = document.getElementById('view-shop');
+            const studio = document.getElementById('view-studio');
+            const title = document.getElementById('main-title');
+            const desc = document.getElementById('main-desc');
+            const bShop = document.getElementById('btn-shop');
+            const bStudio = document.getElementById('btn-studio');
+
+            if (view === 'shop') {
+                shop.classList.remove('hidden'); studio.classList.add('hidden');
+                title.innerText = "Mobiliario Moderno.";
+                desc.innerText = "Piezas funcionales diseñadas y fabricadas en Perú.";
+                bShop.classList.add('active'); bStudio.classList.remove('active');
+            } else {
+                shop.classList.add('hidden'); studio.classList.remove('hidden');
+                title.innerText = "Arquitectura & Detalle.";
+                desc.innerText = "Proyectos integrales de diseño y ejecución.";
+                bShop.classList.remove('active'); bStudio.classList.add('active');
+            }
+            window.scrollTo({top:0, behavior:'smooth'});
+        }   
+
+        function openLightbox(el){
+            const c = document.getElementById('lightbox-content'); c.innerHTML='';
+            const m = el.querySelector('img, video').cloneNode(true);
+            m.className = "max-h-[85vh] w-auto mx-auto rounded-lg";
+            if(m.tagName==='VIDEO') m.controls = true;
+            c.appendChild(m);
+            document.getElementById('lightbox').classList.add('active');
+        }
+        function closeLightbox(){ document.getElementById('lightbox').classList.remove('active'); }
+
+        let currentProduct = '', currentPrice = 0, map = null, marker = null, userCoords = null;
+
+        function openBuyModal(name, price) {
+            currentProduct = name;
+            currentPrice = price;
+            document.getElementById('modalProductName').innerText = name;
+            document.getElementById('scopeSelect').value = 'lima';
+            toggleScope();
+            document.getElementById('districtSelect').value = "";
+            document.getElementById('cityInput').value = "";
+            document.getElementById('locationStatus').classList.add('hidden');
+            userCoords = null; 
+            calcPrice();
+            document.getElementById('buyModal').classList.add('active');
+        }
+
+        function closeBuyModal(){ document.getElementById('buyModal').classList.remove('active'); }
+
+        function toggleScope() {
+            const scope = document.getElementById('scopeSelect').value;
+            const limaOpts = document.getElementById('limaOptions');
+            const provOpts = document.getElementById('provinciaOptions');
+            const payMethod = document.getElementById('paymentMethod');
+            const note = document.getElementById('shippingNote');
+
+            if(scope === 'lima') {
+                limaOpts.classList.remove('hidden');
+                provOpts.classList.add('hidden');
+                payMethod.innerText = "Contra Entrega (Total)";
+                note.classList.add('hidden');
+            } else {
+                limaOpts.classList.add('hidden');
+                provOpts.classList.remove('hidden');
+                payMethod.innerText = "Producto Contra Entrega / Envío Adelantado";
+                note.classList.remove('hidden');
+            }
+            calcPrice();
+        }
+
+        function toggleMap() {
+            const container = document.getElementById('mapContainer');
+            if (container.classList.contains('hidden')) {
+                container.classList.remove('hidden');
+                document.getElementById('mapBtnText').innerText = "Cerrar Mapa";
+                if (!map) {
+                    map = L.map('mapContainer').setView([-12.0464, -77.0428], 12);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+                    map.on('click', function(e) {
+                        if (marker) map.removeLayer(marker);
+                        marker = L.marker(e.latlng).addTo(map);
+                        userCoords = e.latlng;
+                        document.getElementById('locationStatus').classList.remove('hidden');
+                        document.getElementById('locationStatus').innerText = "✓ Ubicación seleccionada";
+                    });
+                }
+                setTimeout(() => { map.invalidateSize(); }, 100);
+            } else {
+                container.classList.add('hidden');
+                document.getElementById('mapBtnText').innerText = "Seleccionar ubicación exacta en Mapa";
+            }
+        }
+
+        function calcPrice() {
+            const scope = document.getElementById('scopeSelect').value;
+            const label = document.getElementById('totalPrice');
+            
+            if (scope === 'provincia') {
+                label.innerText = "S/. " + currentPrice; 
+            } else {
+                const dist = document.getElementById('districtSelect').value;
+                if(dist === "") {
+                    label.innerText = "S/. " + currentPrice; 
+                } else if (dist === 'LimaSur') {
+                    label.innerText = "S/. " + currentPrice + " (Envío GRATIS)";
+                } else {
+                    label.innerText = "S/. " + (currentPrice + 20) + " (Incluye Envío)";
+                }
+            }
+        }
+
+        function sendWA() {
+            const scope = document.getElementById('scopeSelect').value;
+            let msg = "";
+
+            if (scope === 'lima') {
+                const dist = document.getElementById('districtSelect').value;
+                if(!dist) return alert("Selecciona tu distrito en Lima");
+                const envio = dist === 'LimaSur' ? 0 : 20;
+                const total = currentPrice + envio;
+                const mapaLink = userCoords ? `https://maps.google.com/?q=${userCoords.lat},${userCoords.lng}` : "No especificado";
+                const distNombre = dist === 'LimaSur' ? "LIMA SUR" : "LIMA OTROS";
+
+                msg = `Hola NODO, pedido LIMA:\n📦 *${currentProduct}*\n💰 Total: S/. ${total}\n📍 Zona: ${distNombre}\n🗺️ GPS: ${mapaLink}\n\nPago contra entrega.`;
+            } else {
+                const city = document.getElementById('cityInput').value;
+                if(!city) return alert("Escribe tu ciudad");
+                
+                msg = `Hola NODO, pedido PROVINCIA:\n📦 *${currentProduct}*\n💰 Precio Producto: S/. ${currentPrice}\n🚛 Destino: ${city}\n\n*Condición:* Adelanto el envío, pago el producto al recibir.`;
+            }
+
+            window.open(`https://wa.me/51939831604?text=${encodeURIComponent(msg)}`);
+            closeBuyModal();
+        }
+    </script>
+</body>
+</html>
